@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import { Menu, X, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
@@ -122,17 +122,74 @@ export const Navbar = () => {
 
                             {/* Special Join Button - Double Border */}
                             <Link
-                                href="#contact"
+                                href="https://discord.com/invite/zgfT338w"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="relative ml-1.5 group/join"
                             >
                                 {/* Outer border */}
-                                <span className="absolute -inset-[3px] rounded-full border border-white/40 group-hover/join:border-white/70 transition-all duration-300" />
+                                <motion.span
+                                    className="absolute -inset-[3px] rounded-full border transition-colors duration-300"
+                                    animate={{
+                                        borderColor: activeSection === "contact"
+                                            ? "rgba(168, 85, 247, 0.7)"
+                                            : "rgba(255, 255, 255, 0.4)",
+                                    }}
+                                    transition={{ duration: 0.5 }}
+                                />
                                 {/* Inner border */}
-                                <span className="absolute inset-0 rounded-full border border-white/60 group-hover/join:border-white transition-all duration-300" />
+                                <motion.span
+                                    className="absolute inset-0 rounded-full border transition-colors duration-300"
+                                    animate={{
+                                        borderColor: activeSection === "contact"
+                                            ? "rgba(168, 85, 247, 0.9)"
+                                            : "rgba(255, 255, 255, 0.6)",
+                                    }}
+                                    transition={{ duration: 0.5 }}
+                                />
                                 {/* Button content */}
-                                <span className="relative flex items-center px-4 py-2 text-white font-semibold text-[13px] whitespace-nowrap group-hover/join:text-white/90 transition-all duration-300">
-                                    {t.nav.join}
-                                </span>
+                                <motion.span
+                                    className="relative flex items-center justify-center px-4 py-2 rounded-full font-semibold text-[13px] whitespace-nowrap overflow-hidden"
+                                    animate={{
+                                        scale: activeSection === "contact" ? 1 : 1,
+                                    }}
+                                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                                >
+                                    {/* Background gradient */}
+                                    <motion.span
+                                        className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+                                        initial={{ opacity: 0, scale: 0 }}
+                                        animate={{
+                                            opacity: activeSection === "contact" ? 1 : 0,
+                                            scale: activeSection === "contact" ? 1 : 0,
+                                        }}
+                                        transition={{
+                                            duration: 0.5,
+                                            ease: [0.4, 0, 0.2, 1]
+                                        }}
+                                    />
+                                    {/* Shimmer effect */}
+                                    <AnimatePresence>
+                                        {activeSection === "contact" && (
+                                            <motion.span
+                                                initial={{ x: "-100%", opacity: 0 }}
+                                                animate={{ x: "200%", opacity: [0, 1, 0] }}
+                                                exit={{ opacity: 0 }}
+                                                transition={{
+                                                    duration: 1.5,
+                                                    repeat: Infinity,
+                                                    repeatDelay: 2,
+                                                    ease: "easeInOut"
+                                                }}
+                                                className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
+                                            />
+                                        )}
+                                    </AnimatePresence>
+                                    {/* Text */}
+                                    <span className="relative z-10 text-white">
+                                        {t.nav.join}
+                                    </span>
+                                </motion.span>
                             </Link>
                         </div>
                     </div>
