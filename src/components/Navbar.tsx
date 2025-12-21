@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Globe } from "lucide-react";
@@ -9,6 +9,7 @@ import { useLanguage } from "@/context/LanguageContext";
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [activeSection, setActiveSection] = useState("home");
     const { scrollY } = useScroll();
     const { t, language, setLanguage } = useLanguage();
 
@@ -16,15 +17,47 @@ export const Navbar = () => {
         setScrolled(latest > 50);
     });
 
+    // Scroll spy - detect which section is in view
+    useEffect(() => {
+        const sectionIds = ["home", "about", "news", "contact"];
+
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY + 150; // offset for navbar height
+
+            for (const id of sectionIds) {
+                const element = document.getElementById(id);
+                if (element) {
+                    const offsetTop = element.offsetTop;
+                    const offsetHeight = element.offsetHeight;
+
+                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                        setActiveSection(id);
+                        break;
+                    }
+                }
+            }
+
+            // Check if at top of page
+            if (window.scrollY < 100) {
+                setActiveSection("home");
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        handleScroll(); // Initial check
+
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     const toggleLanguage = () => {
         setLanguage(language === "ja" ? "en" : "ja");
     };
 
     const navItems = [
-        { label: t.nav.home, href: "#home" },
-        { label: t.nav.about, href: "#about" },
-        { label: t.nav.news, href: "#news" },
-        { label: t.nav.contact, href: "#contact" },
+        { label: t.nav.home, href: "#home", id: "home" },
+        { label: t.nav.about, href: "#about", id: "about" },
+        { label: t.nav.news, href: "#news", id: "news" },
+        { label: t.nav.contact, href: "#contact", id: "contact" },
     ];
 
     return (
@@ -40,27 +73,69 @@ export const Navbar = () => {
                     <span className="bg-gradient-to-r from-red-500 to-red-800 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(220,38,38,0.4)]">Japan</span>
                 </Link>
 
-                {/* Desktop Menu */}
-                <div className="hidden md:flex items-center space-x-8">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.label}
-                            href={item.href}
-                            className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
-                    <button
-                        onClick={toggleLanguage}
-                        className="flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-colors cursor-pointer"
-                    >
-                        <Globe className="w-4 h-4" />
-                        {language === "ja" ? "English" : "日本語"}
-                    </button>
-                    <Link href="#contact" className="cursor-pointer px-5 py-2 rounded-full bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-colors">
-                        {t.nav.join}
-                    </Link>
+                {/* Desktop Menu - Premium Pill Design */}
+                <div className="hidden md:flex items-center">
+                    {/* Outer glow wrapper */}
+                    <div className="relative group">
+                        {/* Gradient border effect */}
+                        <div className="absolute -inset-[1px] bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-red-500/20 rounded-full blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* Main pill container */}
+                        <div className="relative flex items-center bg-black/90 backdrop-blur-2xl rounded-full px-1.5 py-1 gap-0.5 border border-white/[0.08] shadow-2xl shadow-black/50">
+                            {navItems.map((item) => {
+                                const isActive = activeSection === item.id;
+                                return (
+                                    <Link
+                                        key={item.label}
+                                        href={item.href}
+                                        className={cn(
+                                            "relative px-4 py-2 text-[13px] font-medium rounded-full transition-all duration-300 whitespace-nowrap",
+                                            isActive
+                                                ? "text-black"
+                                                : "text-gray-400 hover:text-white"
+                                        )}
+                                    >
+                                        <span className="relative z-10">{item.label}</span>
+                                        {/* Active indicator background */}
+                                        <span
+                                            className={cn(
+                                                "absolute inset-0 rounded-full transition-all duration-300",
+                                                isActive
+                                                    ? "bg-white opacity-100"
+                                                    : "bg-white/[0.06] opacity-0 hover:opacity-100"
+                                            )}
+                                        />
+                                    </Link>
+                                );
+                            })}
+
+                            <div className="w-px h-4 bg-gradient-to-b from-transparent via-white/20 to-transparent mx-1" />
+
+                            <button
+                                onClick={toggleLanguage}
+                                className="relative flex items-center gap-1.5 px-3 py-2 text-[13px] font-medium text-gray-400 hover:text-white rounded-full transition-all duration-300 cursor-pointer whitespace-nowrap group/lang"
+                            >
+                                <Globe className="w-3.5 h-3.5" />
+                                <span>{language === "ja" ? "EN" : "JP"}</span>
+                                <span className="absolute inset-0 bg-white/[0.06] rounded-full opacity-0 group-hover/lang:opacity-100 transition-opacity duration-300" />
+                            </button>
+
+                            {/* Special Join Button - Double Border */}
+                            <Link
+                                href="#contact"
+                                className="relative ml-1.5 group/join"
+                            >
+                                {/* Outer border */}
+                                <span className="absolute -inset-[3px] rounded-full border border-white/40 group-hover/join:border-white/70 transition-all duration-300" />
+                                {/* Inner border */}
+                                <span className="absolute inset-0 rounded-full border border-white/60 group-hover/join:border-white transition-all duration-300" />
+                                {/* Button content */}
+                                <span className="relative flex items-center px-4 py-2 text-white font-semibold text-[13px] whitespace-nowrap group-hover/join:text-white/90 transition-all duration-300">
+                                    {t.nav.join}
+                                </span>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Mobile Toggle */}
