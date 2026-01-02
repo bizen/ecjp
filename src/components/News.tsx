@@ -95,7 +95,7 @@ export const News = () => {
                                     <ArrowUpRight className="w-5 h-5" />
                                 </motion.a>
                                 <motion.a
-                                    href="https://encodeai.org/about-us"
+                                    href="https://encodeai.org"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     whileHover={{ scale: 1.05 }}

@@ -91,7 +91,7 @@ const translations: Record<Language, Translations> = {
         },
         about: {
             title: "Encode<br />Japanとは？",
-            description: "Encodeは、進歩とイノベーションを支持します。だからこそ、私たちは賢明かつタイムリーな政策提言と教育を通じて、この歴史的な転換期において人類をサポートし、AIの約束された未来を実現することを目指しています。",
+            description: "Encodeは世界15カ国以上に展開するAIガバナンスのユースネットワークです。私たちは進歩とイノベーションを支持します。だからこそ、賢明かつタイムリーな政策提言と教育を通じて、この歴史的な転換期において人類をサポートし、AIの約束された未来を実現することを目指しています。",
             features: [
                 {
                     title: "グローバルネットワーク",
@@ -182,7 +182,7 @@ const translations: Record<Language, Translations> = {
         },
         about: {
             title: "What is<br />Encode Japan?",
-            description: "Encode is pro-progress and pro-innovation. That’s exactly why we want to keep AI’s promise alive through smart, timely policy action. Supported by an international network, we work to support humanity in this time of unprecedented transition.",
+            description: "Encode is a youth network for AI governance spanning 15+ countries worldwide. We are pro-progress and pro-innovation. That's exactly why we want to keep AI's promise alive through smart, timely policy action and education, supporting humanity in this time of unprecedented transition.",
             features: [
                 {
                     title: "Global Network",
