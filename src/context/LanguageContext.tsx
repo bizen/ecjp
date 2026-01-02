@@ -143,7 +143,7 @@ const translations: Record<Language, Translations> = {
                     features: [
                         "無料で誰でも参加可能",
                         "AIや未来に興味のある方歓迎",
-                        "プロジェクトや活動への参加機会"
+                        "研究や提言活動への参加機会"
                     ]
                 },
                 partner: {
@@ -234,7 +234,7 @@ const translations: Record<Language, Translations> = {
                     features: [
                         "Free and open to everyone",
                         "Welcoming all interested in AI & Future",
-                        "Opportunities to join projects & activities"
+                        "Opportunities to join research & advocacies"
                     ]
                 },
                 partner: {
